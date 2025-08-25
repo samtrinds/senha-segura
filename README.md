@@ -1,4 +1,4 @@
-🔒 Verificador e Gerador de Senhas Seguras
+🔒 Verificador e gerador de senhas seguras
 
 Este projeto é uma aplicação web simples e intuitiva para verificar a força de senhas e gerar senhas seguras. Desenvolvido com HTML, CSS e JavaScript puro, ele oferece uma experiência de usuário aprimorada e um design moderno.
 
