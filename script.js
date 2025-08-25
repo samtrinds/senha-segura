@@ -2,6 +2,14 @@ const password = document.getElementById("password");
 const strengthBar = document.getElementById("strength-bar");
 const strengthText = document.getElementById("strength-text");
 const tips = document.getElementById("tips");
+const togglePassword = document.getElementById("toggle-password");
+
+// Função para alternar visibilidade da senha
+togglePassword.addEventListener("click", () => {
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+});
 
 // Função de verificação
 password.addEventListener("input", checkPassword);
@@ -72,5 +80,8 @@ function generatePassword(length = 16) {
 document.getElementById("generate-btn").addEventListener("click", () => {
     const newPass = generatePassword(16);
     password.value = newPass;
+    // Mostra a senha gerada automaticamente
+    password.setAttribute("type", "text");
+    togglePassword.textContent = "🙈";
     checkPassword(); // força verificação
 });
