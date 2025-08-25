@@ -1,51 +1,76 @@
-const passwordInput = document.getElementById('password');
-const strengthBar = document.getElementById('strength-bar');
-const strengthText = document.getElementById('strength-text');
-const tipsList = document.getElementById('tips');
+const password = document.getElementById("password");
+const strengthBar = document.getElementById("strength-bar");
+const strengthText = document.getElementById("strength-text");
+const tips = document.getElementById("tips");
 
-passwordInput.addEventListener('input', () => {
-    const password = passwordInput.value;
-    const strength = calculateStrength(password);
-    updateBar(strength);
-    updateText(strength);
-    updateTips(password);
-});
+// Função de verificação
+password.addEventListener("input", checkPassword);
 
-function calculateStrength(password) {
-    let score = 0;
-    if (password.length >= 12) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[a-z]/.test(password)) score+;
-    if (/[0-9]/.test(password)) score++;
-    if (/[\W]/.test(password)) score++;
-    return score;
-}
+function checkPassword() {
+    const val = password.value;
+    let strength = 0;
+    let requirements = [];
 
-function updateBar(score) {
-    const bar = document.createElement('div');
-    bar.style.width = (score*20) + '%';
-    bar.style.background = score < 3 ? 'red' : score < 5 ? 'orange' : 'green';
-    strengthBar.innerHTML = '';
-    strengthBar.appendChild(bar);
-}
+    if (val.length >= 12) strength++;
+    else requirements.push("Use pelo menos 12 caracteres");
 
-function updateText(score) {
-    const text = score < 3 ? 'Fraca ❌' : score < 5 ? 'Média ⚠️' : 'Forte ✅';
+    if (/[A-Z]/.test(val)) strength++;
+    else requirements.push("Adicione letras maiúsculas");
+
+    if (/[0-9]/.test(val)) strength++;
+    else requirements.push("Adicione números");
+
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+    else requirements.push("Use símbolos (!@#$%)");
+
+    // Atualiza barra
+    let bar = strengthBar.querySelector("div");
+    if (!bar) {
+        bar = document.createElement("div");
+        strengthBar.appendChild(bar);
+    }
+    bar.style.width = (strength * 25) + "%";
+
+    let color, text;
+    switch (strength) {
+        case 0:
+        case 1:
+            color = "red";
+            text = "Senha fraca ❌";
+            break;
+        case 2:
+            color = "orange";
+            text = "Senha média ⚠️";
+            break;
+        case 3:
+            color = "dodgerblue";
+            text = "Senha boa 👍";
+            break;
+        case 4:
+            color = "green";
+            text = "Senha forte ✅";
+            break;
+    }
+    bar.style.background = color;
     strengthText.textContent = text;
+
+    // Atualiza dicas
+    tips.innerHTML = requirements.map(r => `<li>${r}</li>`).join("");
 }
 
-function updateTips(password) {
-    const tips = [];
-    if (password.length < 12) tips.push('Use pelo menos 8 caracteres.');
-    if (!/[A-Z]/.test(password)) tips.push('Adicione letras maiúsculas.');
-    if (!/[a-z]/.test(password)) tips.push('Adicione letras minúsculas.');
-    if (!/[0-9]/.test(password)) tips.push('Inclua números.');
-    if (!/[\W]/.test(password)) tips.push('Inclua caracteres especiais.');
-    
-    tipsList.innerHTML = '';
-    tips.forEach(tip => {
-        const li = document.createElement('li');
-        li.textContent = tip;
-        tipsList.appendChild(li);
-    });
+// Função para gerar senhas seguras
+function generatePassword(length = 16) {
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{};:,.<>?";
+    let newPass = "";
+    for (let i = 0; i < length; i++) {
+        newPass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return newPass;
 }
+
+// Botão de gerar senha
+document.getElementById("generate-btn").addEventListener("click", () => {
+    const newPass = generatePassword(16);
+    password.value = newPass;
+    checkPassword(); // força verificação
+});
