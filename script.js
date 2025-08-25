@@ -13,9 +13,9 @@ passwordInput.addEventListener('input', () => {
 
 function calculateStrength(password) {
     let score = 0;
-    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
     if (/[A-Z]/.test(password)) score++;
-    if (/[a-z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score+;
     if (/[0-9]/.test(password)) score++;
     if (/[\W]/.test(password)) score++;
     return score;
@@ -36,7 +36,7 @@ function updateText(score) {
 
 function updateTips(password) {
     const tips = [];
-    if (password.length < 8) tips.push('Use pelo menos 8 caracteres.');
+    if (password.length < 12) tips.push('Use pelo menos 8 caracteres.');
     if (!/[A-Z]/.test(password)) tips.push('Adicione letras maiúsculas.');
     if (!/[a-z]/.test(password)) tips.push('Adicione letras minúsculas.');
     if (!/[0-9]/.test(password)) tips.push('Inclua números.');
